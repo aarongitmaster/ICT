@@ -6,6 +6,7 @@ namespace ICTTaxApi.Data.Entities
     {
         public int Id { get; set; }
         [Required]
-        public int ClientName { get; set; }
+        public string ClientName { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 }

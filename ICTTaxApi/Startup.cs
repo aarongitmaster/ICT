@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using ICTTaxApi.Data.Entities;
 using ICTTaxApi.Filters;
+using ICTTaxApi.Services;
+using ICTTaxApi.Data.Repositories;
 
 namespace ICTTaxApi
 {
@@ -16,17 +18,18 @@ namespace ICTTaxApi
 
     public void ConfigureServices(IServiceCollection services)
     {
-            services.AddControllers(options =>
-            {
-                options.Filters.Add(typeof(ExceptionFilter));
-            }).AddJsonOptions(x =>
-             x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
+        services.AddControllers(options =>
+        {
+            options.Filters.Add(typeof(ExceptionFilter));
+        }).AddJsonOptions(x =>
+        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
 
-            //services.AddTransient<MyActionFilter>();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        services.AddTransient<IICTTaxService, ICTTaxService>();
+        services.AddTransient<IClientRepository, ClientRepository>();
+        services.AddTransient<ITransactionRepository, TransactionRepository>();
         services.AddEndpointsApiExplorer();
 
-        //services.AddHostedService<ICWriteInFile>();
+            //services.AddHostedService<ICWriteInFile>();
 
         services.AddResponseCaching();
 

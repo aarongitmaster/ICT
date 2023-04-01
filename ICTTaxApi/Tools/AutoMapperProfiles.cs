@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ICTTaxApi.Data.Entities;
+using ICTTaxApi.DTOs;
 
 namespace ICTTaxApi.Tools
 {
@@ -6,68 +8,12 @@ namespace ICTTaxApi.Tools
     {
         public AutoMapperProfiles()
         {
-            //CreateMap<AuthorCreationDTO, Author>();
-            //CreateMap<Author, AuthorDTO>();
-            //CreateMap<Author, AuthorWithBooksDTO >()
-            //    .ForMember(authorDTO => authorDTO.Books, options => options.MapFrom(MapAuthorDTOBooks));
-            //CreateMap<BookCreationDTO, Book>()
-            //    .ForMember(book => book.BooksAuthors, options => options.MapFrom(MapBooksAuthors));
-            //CreateMap<BookPatchDTO, Book>().ReverseMap();
-            //CreateMap<Book, BookDTO>().ReverseMap();
-            //CreateMap<Book, BookWithAuthorsDTO>()
-            //    .ForMember(bookDTO => bookDTO.Authors, options => options.MapFrom(MapBookDTOAuthors));
-            //CreateMap<CommentCreationDTO, Comment>();
-            //CreateMap<Comment, CommentDTO>();
+            CreateMap<Transaction, TransactionDTO>()
+                .ForMember(transaction => transaction.Filename, options => options.MapFrom(x=>x.TaxDocument.FileName))
+                .ForMember(transaction => transaction.UploadedDate, options => options.MapFrom(x => x.TaxDocument.UploadedDate.ToString("dd Mmm yyyy hh:mmAM/PM")))
+                .ForMember(transaction => transaction.ClientName, options => options.MapFrom(x => x.Client.ClientName))
+                .ForMember(transaction => transaction.TransactionDate, options => options.MapFrom(x => x.TransactionDate.ToString("dd Mmm yyyy")));
         }
-
-        
-
-
-        //private List<BookAuthor> MapBooksAuthors(BookCreationDTO bookDTO, Book book)
-        //{
-        //    var result = new List<BookAuthor>();
-
-        //    if(bookDTO.AutoresIds == null) { return result; }
-
-        //    foreach(var authorId in bookDTO.AutoresIds)
-        //    {
-        //        result.Add(new BookAuthor() { AuthorId = authorId });
-        //    }
-        //    return result;
-        //}
-
-        //private List<AuthorDTO> MapBookDTOAuthors(Book book, BookDTO bookDTO)
-        //{
-        //    var result = new List<AuthorDTO>();
-
-        //    if (book.BooksAuthors == null) { return result; }
-
-        //    foreach (var authorBook in book.BooksAuthors)
-        //    {
-        //        result.Add(new AuthorDTO() {
-        //            Id = authorBook.AuthorId,
-        //            Name = authorBook.Author.Name
-        //        });
-        //    }
-        //    return result;
-        //}
-
-        //private List<BookDTO> MapAuthorDTOBooks(Author author, AuthorDTO authorDTO)
-        //{
-        //    var result = new List<BookDTO>();
-
-        //    if (author.BooksAuthors == null) { return result; }
-
-        //    foreach (var authorBook in author.BooksAuthors)
-        //    {
-        //        result.Add(new BookDTO()
-        //        {
-        //            Id = authorBook.BookId,
-        //            Title = authorBook.Book.Title
-        //        });
-        //    }
-        //    return result;
-        //}
 
     }
 }
