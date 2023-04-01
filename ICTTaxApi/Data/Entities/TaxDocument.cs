@@ -1,8 +1,11 @@
-﻿namespace ICTTaxApi.Data.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ICTTaxApi.Data.Entities
 {
     public class TaxDocument
     {
         public int Id { get; set; }
+        [Required]
         public string FileName { get; set; }
         public DateTime UploadedDate { get; set; }
         public int Total{ get; set; }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ICTTaxApi.Migrations
 {
     [DbContext(typeof(ICTTaxDbContext))]
-    [Migration("20230401144353_Initial")]
+    [Migration("20230401151847_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -83,17 +83,17 @@ namespace ICTTaxApi.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
-                    b.Property<int>("TransactionDate")
+                    b.Property<int>("TaxDocumentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("taxDocumentId")
+                    b.Property<int>("TransactionDate")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("taxDocumentId");
+                    b.HasIndex("TaxDocumentId");
 
                     b.ToTable("Transactions");
                 });
@@ -108,7 +108,7 @@ namespace ICTTaxApi.Migrations
 
                     b.HasOne("ICTTaxApi.Data.Entities.TaxDocument", "TaxDocument")
                         .WithMany("Transactions")
-                        .HasForeignKey("taxDocumentId")
+                        .HasForeignKey("TaxDocumentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

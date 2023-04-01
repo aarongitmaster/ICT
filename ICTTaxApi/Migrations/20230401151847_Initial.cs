@@ -49,7 +49,7 @@ namespace ICTTaxApi.Migrations
                     Description = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    taxDocumentId = table.Column<int>(type: "int", nullable: false)
+                    TaxDocumentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,8 +61,8 @@ namespace ICTTaxApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Transactions_TaxDocuments_taxDocumentId",
-                        column: x => x.taxDocumentId,
+                        name: "FK_Transactions_TaxDocuments_TaxDocumentId",
+                        column: x => x.TaxDocumentId,
                         principalTable: "TaxDocuments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -74,9 +74,9 @@ namespace ICTTaxApi.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_taxDocumentId",
+                name: "IX_Transactions_TaxDocumentId",
                 table: "Transactions",
-                column: "taxDocumentId");
+                column: "TaxDocumentId");
         }
 
         /// <inheritdoc />
