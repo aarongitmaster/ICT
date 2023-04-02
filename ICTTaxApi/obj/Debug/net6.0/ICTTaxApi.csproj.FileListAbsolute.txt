@@ -4,7 +4,6 @@ C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\ICTTaxApi.exe
 C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\ICTTaxApi.deps.json
 C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\ICTTaxApi.runtimeconfig.json
 C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\ICTTaxApi.dll
-C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\ref\ICTTaxApi.dll
 C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\ICTTaxApi.pdb
 C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\Humanizer.dll
 C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
@@ -82,3 +81,6 @@ C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp
 C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\ExcelDataReader.dll
+C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\ExcelDataReader.DataSet.dll
+C:\Learning\ICT\ICTTaxApi\ICTTaxApi\bin\Debug\net6.0\ref\ICTTaxApi.dll

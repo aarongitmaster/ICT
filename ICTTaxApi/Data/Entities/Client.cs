@@ -1,8 +1,12 @@
-﻿namespace ICTTaxApi.Data.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ICTTaxApi.Data.Entities
 {
     public class Client
     {
         public int Id { get; set; }
-        public int ClientName { get; set; }
+        [Required]
+        public string ClientName { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ICTTaxApi.Migrations
 {
     [DbContext(typeof(ICTTaxDbContext))]
-    [Migration("20230401144353_Initial")]
+    [Migration("20230401221956_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -33,8 +33,9 @@ namespace ICTTaxApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClientName")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -53,8 +54,8 @@ namespace ICTTaxApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Total")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UploadedDate")
                         .HasColumnType("datetime2");
@@ -79,21 +80,20 @@ namespace ICTTaxApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
-                    b.Property<int>("TransactionDate")
+                    b.Property<int>("TaxDocumentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("taxDocumentId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("taxDocumentId");
+                    b.HasIndex("TaxDocumentId");
 
                     b.ToTable("Transactions");
                 });
@@ -108,7 +108,7 @@ namespace ICTTaxApi.Migrations
 
                     b.HasOne("ICTTaxApi.Data.Entities.TaxDocument", "TaxDocument")
                         .WithMany("Transactions")
-                        .HasForeignKey("taxDocumentId")
+                        .HasForeignKey("TaxDocumentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
