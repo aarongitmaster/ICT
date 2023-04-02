@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAtXXVn05ahkG8y38ppl18kAAAAAACAAAAAAAQZgAAAAEAACAAAAA1DEgiJg22uBG6K8jNjsNuvDx4eeNY1Wm4/cT96mqaRgAAAAAOgAAAAAIAACAAAAC54b9Vf3V+oaaFfk+HjOUVk4VDuaTi1CGbDeQpCna5f4AAAACsrT+HChzHN3rOyMNucQiB02x8bAnuqy7sghBvPK11N9tdRXNPg6HEQlh67y0NWWwTg91rnM2rAxSSbyhVxb3IKpGbSizg6adZbI+nHdGdc5NvBzhc7BsQPx0XztTOhwW3dhyxe3pKQxSDxfCGr5boIvez1B47HNmTtT2aq0RZXEAAAACRZl7LFto2U+Pdq64ABeEeYgqofGuCJNiZDplI3HV/lgRHvZVn+P5jE5bKCwRHuLg3WGs0pnpl9yYEN7DcTFRT</EncryptedPassword>
+    <History>False|2023-04-02T09:08:07.3153207Z;False|2023-04-02T10:56:14.0827561+02:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <EFMigrations Include="ICTTaxApi.Data.Entities.ICTTaxDbContext">
+      <Value>Data Source=tcp:icttaxapidbserver.database.windows.net,1433%3bInitial Catalog=ICTTaxApi_db%3bUser Id=badger%40icttaxapidbserver%3bPassword=pass:Spring487</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>
