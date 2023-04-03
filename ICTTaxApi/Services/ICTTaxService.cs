@@ -26,17 +26,17 @@ namespace ICTTaxApi.Services
 
             var dbClients = await clientRepository.GetClients(clientDTOList);
 
-            var transactionList = mapper.Map<List<Transaction>>(transactionsDTO);
-
-            foreach(var transaction in transactionsDTO)
+            foreach (var transaction in transactionsDTO)
             {
-                transaction.ClientId = 
+                transaction.ClientId =
                     dbClients.Where(clientdb => clientdb.ClientName.Equals(transaction.ClientName))
                     .Select(clientdb => clientdb.Id)
                     .FirstOrDefault();
             }
 
-            transactionRepository.Add(transactionList, filename);
+            var transactionList = mapper.Map<List<Transaction>>(transactionsDTO);
+
+            await transactionRepository.Add(transactionList, filename);
 
             return true;
         }
@@ -64,9 +64,9 @@ namespace ICTTaxApi.Services
             };
         }
 
-        public async Task<List<TransactionDTO>> GetTransactions()
+        public async Task<List<TransactionDTO>> GetTransactions(int pageNumber, int pageSize)
         {
-            var transactions =  await transactionRepository.Get();
+            var transactions =  await transactionRepository.Get(pageNumber, pageSize);
 
             return mapper.Map<List<TransactionDTO>>(transactions);
 

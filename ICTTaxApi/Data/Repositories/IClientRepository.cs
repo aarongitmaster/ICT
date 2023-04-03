@@ -8,7 +8,7 @@ namespace ICTTaxApi.Data.Repositories
         Task<List<Client>> GetClients(List<string> clients);
         Task<Client> GetByName(string clientame);
         Task<int> Count();
-        Task Complete();
+        Task Save();
     }
 }
 

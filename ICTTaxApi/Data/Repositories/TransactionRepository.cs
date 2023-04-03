@@ -13,11 +13,13 @@ namespace ICTTaxApi.Data.Repositories
         }
         
 
-        public async Task<List<Transaction>> Get()
+        public async Task<List<Transaction>> Get(int pageNumber, int pageSize)
         {
-            return await context.Transactions
-                .Include(transaction => transaction.TaxDocument)
-                .Include(transaction => transaction.Client).ToListAsync();
+                return await context.Transactions
+                    .Include(transaction => transaction.TaxDocument)
+                    .Include(transaction => transaction.Client)
+                    .Skip((pageNumber - 1) * pageSize).Take(pageSize)
+                    .ToListAsync();
         }
 
         public async Task<List<Transaction>> GetById(int clientId)
@@ -31,28 +33,29 @@ namespace ICTTaxApi.Data.Repositories
 
         public async Task Add(List<Transaction> transactions, string filename)
         {
-            var amounts = transactions.Select(x => x.Amount);
-            var newTaxDocument = new TaxDocument()
-            {
-                UploadedDate = DateTime.Now,
-                Total = amounts.Sum(amount => amount),
-                FileName = filename
-            };
-
-            if (transactions != null)
-            {
-                var taxDocument = context.Add(newTaxDocument);
-                await Save();
-
-                foreach (var transaction in transactions)
+            
+                var amounts = transactions.Select(x => x.Amount);
+                var newTaxDocument = new TaxDocument()
                 {
-                    transaction.TaxDocumentId = taxDocument.Entity.Id;
+                    UploadedDate = DateTime.Now,
+                    Total = amounts.Sum(amount => amount),
+                    FileName = string.Format("{0}_{1}", DateTime.Now.ToFileTime(), filename)
+                };
+
+                if (transactions != null)
+                {
+                    var taxDocument = await context.AddAsync(newTaxDocument);
+                    await Save();
+
+                    foreach (var transaction in transactions)
+                    {
+                        transaction.TaxDocumentId = taxDocument.Entity.Id;
+                    }
+
+                    await context.Transactions.AddRangeAsync(transactions);
+
+                    await Save();
                 }
-
-                newTaxDocument.Transactions.AddRange(transactions);
-
-                await Save();
-            }
         }
 
         public async Task<int> GetTransactionCount()

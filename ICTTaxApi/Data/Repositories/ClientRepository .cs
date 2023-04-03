@@ -14,14 +14,7 @@ namespace ICTTaxApi.Data.Repositories
 
         public async Task<List<Client>> GetClients(List<string> clients)
         {
-            try
-            {
-                return await context.Clients.Where(client => clients.Contains(client.ClientName)).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return await context.Clients.Where(client => clients.Contains(client.ClientName)).ToListAsync();
         }
 
         public async Task<Client> GetByName(string clientname)
@@ -38,9 +31,11 @@ namespace ICTTaxApi.Data.Repositories
                                     .Where(client => !clientListDB.Contains(client.ClientName)).ToList();
 
 
-
-            await context.Clients.AddRangeAsync(newClients);
-            await Complete();
+            if (newClients.Count > 0)
+            {
+                await context.Clients.AddRangeAsync(newClients);
+                await Save();
+            }
         }
 
         public async Task<int> Count()
@@ -48,7 +43,7 @@ namespace ICTTaxApi.Data.Repositories
             return await context.Clients.CountAsync();
         }
 
-        public async Task Complete()
+        public async Task Save()
         {
             try
             {

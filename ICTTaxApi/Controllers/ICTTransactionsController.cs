@@ -3,6 +3,8 @@ using ICTTaxApi.DTOs;
 using ICTTaxApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using ICTTaxApi.Tools;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ICTTaxApi.Controllers
 {
@@ -24,22 +26,35 @@ namespace ICTTaxApi.Controllers
         [HttpGet("transactions",Name ="GetTransactions")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(List<TransactionDTO>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<TransactionDTO>>> Get()
+        [ProducesResponseType(typeof(TransactionResponseDTO), StatusCodes.Status200OK)]
+        //[Authorize]
+        public async Task<ActionResult<TransactionResponseDTO>> Get(
+            [FromQuery] int pageNumber=1,
+            [FromQuery] int pageSize=50)
         {
             try
             {
-                var transactionList = await service.GetTransactions();
+                TransactionResponseDTO response;
+                var transactionList = await service.GetTransactions(pageNumber, pageSize);
 
                 if (transactionList == null)
                 {
                     return NotFound();
                 }
+                
+                response = new TransactionResponseDTO(
+                    pageNumber,
+                    pageSize,
+                    transactionList.Count(),
+                    transactionList.Count());
 
-                return transactionList;
+                response.Transactions = transactionList;
+
+                return response;
             }
             catch (Exception ex)
             {
+                this.logger.LogError("An error ocurred while retrieving transactions.{0}", ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -47,6 +62,7 @@ namespace ICTTaxApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType( StatusCodes.Status201Created)]
+        //[Authorize]
         public async Task<ActionResult> Post(IFormFile file)
         {
             try
@@ -62,7 +78,7 @@ namespace ICTTaxApi.Controllers
                     //{
                         this.logger.LogInformation("Start request add file {0} to system.");
 
-                        service.AddTransactions(DTOlist, file.FileName);
+                        await service.AddTransactions(DTOlist, file.FileName);
                     //}
                     //else
                       //  return BadRequest("An error ocurred while validating the request. Somes fields are in incorrect format.");
@@ -87,6 +103,7 @@ namespace ICTTaxApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(List<TransactionDTO>),StatusCodes.Status200OK)]
+        //[Authorize]
         public async Task<ActionResult<List<TransactionDTO>>> Get([FromRoute]string clientname)
         {
             try
@@ -111,6 +128,7 @@ namespace ICTTaxApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(TransactionSummaryDTO), StatusCodes.Status200OK)]
+        //[Authorize]
         public async Task<ActionResult<TransactionSummaryDTO>> GetSummary()
         {
             try
