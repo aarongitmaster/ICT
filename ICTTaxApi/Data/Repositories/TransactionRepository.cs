@@ -24,6 +24,7 @@ namespace ICTTaxApi.Data.Repositories
         {
             return await context.Transactions
                 .Include(transaction => transaction.TaxDocument)
+                .Include(transaction => transaction.Client)
                 .Where(transaction => transaction.ClientId.Equals(clientId))
                 .ToListAsync();
         }
@@ -37,10 +38,21 @@ namespace ICTTaxApi.Data.Repositories
                 Total = amounts.Sum(amount => amount),
                 FileName = filename
             };
-            newTaxDocument.Transactions.AddRange(transactions);
 
-            context.Add(newTaxDocument);
-            await Complete();
+            if (transactions != null)
+            {
+                var taxDocument = context.Add(newTaxDocument);
+                await Save();
+
+                foreach (var transaction in transactions)
+                {
+                    transaction.TaxDocumentId = taxDocument.Entity.Id;
+                }
+
+                newTaxDocument.Transactions.AddRange(transactions);
+
+                await Save();
+            }
         }
 
         public async Task<int> GetTransactionCount()
@@ -60,9 +72,16 @@ namespace ICTTaxApi.Data.Repositories
             return await context.TaxDocuments.CountAsync();
         }
 
-        private async Task Complete()
+        private async Task Save()
         {
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

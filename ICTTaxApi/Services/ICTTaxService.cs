@@ -19,29 +19,22 @@ namespace ICTTaxApi.Services
             this.mapper = mapper;
         }
 
-        public async Task<bool> AddTransactions(List<TransactionDTO> transactionsDTO,string filename)
+        public async Task<bool> AddTransactions(List<TransactionCreationDTO> transactionsDTO,string filename)
         {
-            var updateClients = false;
+            var clientDTOList = transactionsDTO.Select(transation=> transation.ClientName).ToList();
+            await clientRepository.AddRange(clientDTOList);
 
-            foreach(var transactionDTO in transactionsDTO)
-            {
-                var clientExists = await clientRepository.Exist(transactionDTO.ClientName);
-
-                if (!clientExists)
-                {
-                    await clientRepository.Add(new Client()
-                    {
-                        ClientName = transactionDTO.ClientName,
-                        CreateDate = DateTime.Now
-                    });
-                    updateClients = true;
-                }
-            }
-
-            if (updateClients)
-                await clientRepository.Complete();
+            var dbClients = await clientRepository.GetClients(clientDTOList);
 
             var transactionList = mapper.Map<List<Transaction>>(transactionsDTO);
+
+            foreach(var transaction in transactionsDTO)
+            {
+                transaction.ClientId = 
+                    dbClients.Where(clientdb => clientdb.ClientName.Equals(transaction.ClientName))
+                    .Select(clientdb => clientdb.Id)
+                    .FirstOrDefault();
+            }
 
             transactionRepository.Add(transactionList, filename);
 
@@ -64,6 +57,7 @@ namespace ICTTaxApi.Services
         {
             return new TransactionSummaryDTO()
             {
+                TotalClients = await clientRepository.Count(),
                 TotalTransactions = await transactionRepository.GetTransactionCount(),
                 TotalAmount = await transactionRepository.GetTotalTaxes(),
                 FileCount = await transactionRepository.GetTotalFiles()

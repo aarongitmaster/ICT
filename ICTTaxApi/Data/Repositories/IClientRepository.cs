@@ -4,9 +4,10 @@ namespace ICTTaxApi.Data.Repositories
 {
     public interface IClientRepository
     {
-        Task<bool> Add(Client client);
+        Task AddRange(List<string> clients);
+        Task<List<Client>> GetClients(List<string> clients);
         Task<Client> GetByName(string clientame);
-        Task<bool> Exist(string clientame);
+        Task<int> Count();
         Task Complete();
     }
 }

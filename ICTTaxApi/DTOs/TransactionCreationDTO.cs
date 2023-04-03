@@ -2,7 +2,7 @@
 
 namespace ICTTaxApi.DTOs
 {
-    public class TransactionDTO
+    public class TransactionCreationDTO
     {
         [Required]
         public string TransactionDate { get; set; }
@@ -18,5 +18,8 @@ namespace ICTTaxApi.DTOs
         
         public string UploadedDate { get; set; }
 
+        public int TaxDocumentId { get; set; }
+
+        public int ClientId { get; set; }
     }
 }

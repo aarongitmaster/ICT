@@ -7,23 +7,24 @@ using ICTTaxApi.Tools;
 namespace ICTTaxApi.Controllers
 {
     [ApiController]
-    [Route("api/client/")]
+    [Route("api/v1/")]
     public class ICTTransactionController : ControllerBase
     {
         private readonly IICTTaxService service;
         private readonly ILogger<ICTTransactionController> logger;
-        private readonly IMapper mapper;
 
         public ICTTransactionController(IICTTaxService service,
             ILogger<ICTTransactionController> logger, IMapper mapper)
         {
             this.service = service;
             this.logger = logger;
-            this.mapper = mapper;
         }
 
         [HttpGet]
         [HttpGet("transactions",Name ="GetTransactions")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(List<TransactionDTO>), StatusCodes.Status200OK)]
         public async Task<ActionResult<List<TransactionDTO>>> Get()
         {
             try
@@ -44,23 +45,30 @@ namespace ICTTaxApi.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType( StatusCodes.Status201Created)]
         public async Task<ActionResult> Post(IFormFile file)
         {
             try
             {
-                var (model, message) = await ExcelMapperDevice.Map(file);
+                var (DTOlist, message) = await ExcelMapperDevice.Map(file);
+
+                var model = DTOlist;
 
                 if (model != null)
                 {
-                    TryUpdateModelAsync(model);
 
-                    if (ModelState.IsValid)
-                    {
-                        service.AddTransactions(model, "pruebas");
-                    }
-                    else
-                        return BadRequest("An error ocurred while validating the request. Somes fields are in incorrect format.");
+                    //if (await TryUpdateModelAsync<List<TransactionDTO>>(model))
+                    //{
+                        this.logger.LogInformation("Start request add file {0} to system.");
 
+                        service.AddTransactions(DTOlist, file.FileName);
+                    //}
+                    //else
+                      //  return BadRequest("An error ocurred while validating the request. Somes fields are in incorrect format.");
+                    //}
+
+                    this.logger.LogInformation("File successfully updated.");
 
                     return CreatedAtRoute("GetTransactions",null);
                 }
@@ -68,14 +76,18 @@ namespace ICTTaxApi.Controllers
                     return BadRequest(message);
                 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                this.logger.LogError("An error ocurred while adding transactions.{0}", ex.Message);
                 return null;
             }
         }
 
-        [HttpGet("{clientname}")]
-        public async Task<ActionResult<List<TransactionDTO>>> Get(string clientname)
+        [HttpGet("client/{clientname}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(List<TransactionDTO>),StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<TransactionDTO>>> Get([FromRoute]string clientname)
         {
             try
             {
@@ -90,11 +102,15 @@ namespace ICTTaxApi.Controllers
             }
             catch (Exception ex)
             {
+                this.logger.LogError("An error ocurred while retrieving client transactions for client: {0}.{1}", clientname,ex.Message);
                 return BadRequest();
             }
         }
 
         [HttpGet("summary")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(TransactionSummaryDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<TransactionSummaryDTO>> GetSummary()
         {
             try
@@ -110,6 +126,7 @@ namespace ICTTaxApi.Controllers
             }
             catch (Exception ex)
             {
+                this.logger.LogError("An error ocurred while retrieving the summary of transactions.{0}", ex.Message);
                 return BadRequest();
             }
         }
