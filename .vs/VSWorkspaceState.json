@@ -2,8 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\ICTTaxApi",
-    "\\ICTTaxWeb"
+    "\\ICTTaxApi\\Data",
+    "\\ICTTaxApi\\Data\\Repositories",
+    "\\ICTTaxWeb",
+    "\\ICTTaxWeb\\src",
+    "\\ICTTaxWeb\\src\\app",
+    "\\ICTTaxWeb\\src\\app\\tax-documents",
+    "\\ICTTaxWeb\\src\\app\\tax-documents\\tax-client",
+    "\\ICTTaxWeb\\src\\app\\tax-documents\\tax-summary"
   ],
-  "SelectedNode": "\\ICTTaxApi.sln",
+  "SelectedNode": "\\ICTTaxWeb\\src\\app\\tax-documents\\tax-documents.component.ts",
   "PreviewInSolutionExplorer": false
 }

@@ -27,13 +27,7 @@ namespace ICTTaxApi.Tools
                         await file.CopyToAsync(memoryStream);
                         memoryStream.Position = 0;
 
-                        //var fileContent = reader.ReadToEnd();
-                        //var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-                        //var fileName = parsedContentDisposition.FileName.Value;
-
                         if (memoryStream != null && memoryStream.Length > 0) {
-                            //if (reader != null && reader..Length > 0)
-                            //{
 
                             if (filename.EndsWith(".xls") || filename.EndsWith(".xlsx") || filename.EndsWith(".xltx"))
                             {

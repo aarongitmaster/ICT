@@ -30,12 +30,13 @@ namespace ICTTaxApi.Controllers
         //[Authorize]
         public async Task<ActionResult<TransactionResponseDTO>> Get(
             [FromQuery] int pageNumber=1,
-            [FromQuery] int pageSize=50)
+            [FromQuery] int pageSize=50,
+            [FromQuery] string sortValue="")
         {
             try
             {
                 TransactionResponseDTO response;
-                var transactionList = await service.GetTransactions(pageNumber, pageSize);
+                var transactionList = await service.GetTransactions(pageNumber, pageSize, sortValue);
 
                 if (transactionList == null)
                 {
@@ -104,11 +105,11 @@ namespace ICTTaxApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(List<TransactionDTO>),StatusCodes.Status200OK)]
         //[Authorize]
-        public async Task<ActionResult<List<TransactionDTO>>> Get([FromRoute]string clientname)
+        public async Task<ActionResult<List<TransactionDTO>>> Get([FromRoute]string clientname, [FromQuery] string sortValue)
         {
             try
             {
-                var transactionList = await service.GetClientTransactions(clientname);
+                var transactionList = await service.GetClientTransactions(clientname, sortValue);
 
                 if (transactionList == null)
                 {

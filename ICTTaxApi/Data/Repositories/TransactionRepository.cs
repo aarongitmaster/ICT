@@ -13,22 +13,49 @@ namespace ICTTaxApi.Data.Repositories
         }
         
 
-        public async Task<List<Transaction>> Get(int pageNumber, int pageSize)
+        public async Task<List<Transaction>> Get(int pageNumber, int pageSize, string sortValue)
         {
-                return await context.Transactions
-                    .Include(transaction => transaction.TaxDocument)
-                    .Include(transaction => transaction.Client)
-                    .Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                    .ToListAsync();
+            var transactionsDb = context.Transactions
+                .Include(transaction => transaction.TaxDocument)
+                .Include(transaction => transaction.Client);
+
+            var resultList = new List<Transaction>();
+            switch (sortValue)
+            {
+                default:
+                case "date":
+                    resultList = await transactionsDb.OrderBy(transaction => transaction.TransactionDate).ToListAsync();
+                    break;
+                case "filename":
+                    resultList = await transactionsDb.OrderBy(transaction => transaction.TaxDocument.FileName).ToListAsync(); 
+                    break;
+                case "updated":
+                    resultList = await transactionsDb.OrderBy(transaction => transaction.TaxDocument.UploadedDate).ToListAsync();
+                    break;
+            }
+
+            resultList = resultList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            
+            return resultList;
         }
 
-        public async Task<List<Transaction>> GetById(int clientId)
+        public async Task<List<Transaction>> GetById(int clientId, string sortValue)
         {
-            return await context.Transactions
+            var transactionsDb = context.Transactions
                 .Include(transaction => transaction.TaxDocument)
                 .Include(transaction => transaction.Client)
-                .Where(transaction => transaction.ClientId.Equals(clientId))
-                .ToListAsync();
+                .Where(transaction => transaction.ClientId.Equals(clientId));
+            var resultList = new List<Transaction>();
+
+            switch (sortValue)
+            {
+                default:
+                case "date": resultList= await transactionsDb.OrderBy(transaction => transaction.TransactionDate).ToListAsync(); break;
+                case "filename": resultList = await transactionsDb.OrderBy(transaction => transaction.TaxDocument.FileName).ToListAsync(); break;
+                case "updated": resultList = await transactionsDb.OrderBy(transaction => transaction.TaxDocument.UploadedDate).ToListAsync(); break;
+            }
+
+            return  resultList;
         }
 
         public async Task Add(List<Transaction> transactions, string filename)

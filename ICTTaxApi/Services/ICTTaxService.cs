@@ -41,14 +41,14 @@ namespace ICTTaxApi.Services
             return true;
         }
 
-        public async  Task<List<TransactionDTO>> GetClientTransactions(string clientname)
+        public async  Task<List<TransactionDTO>> GetClientTransactions(string clientname, string sortValue)
         {
             var client = await clientRepository.GetByName(clientname);
 
             if (client == null)
                 return null;
 
-            var transactions = await transactionRepository.GetById(client.Id);
+            var transactions = await transactionRepository.GetById(client.Id,sortValue);
 
             return mapper.Map<List<TransactionDTO>>(transactions);
         }
@@ -64,9 +64,9 @@ namespace ICTTaxApi.Services
             };
         }
 
-        public async Task<List<TransactionDTO>> GetTransactions(int pageNumber, int pageSize)
+        public async Task<List<TransactionDTO>> GetTransactions(int pageNumber, int pageSize, string sortValue)
         {
-            var transactions =  await transactionRepository.Get(pageNumber, pageSize);
+            var transactions =  await transactionRepository.Get(pageNumber, pageSize, sortValue);
 
             return mapper.Map<List<TransactionDTO>>(transactions);
 
