@@ -8,15 +8,16 @@ namespace ICTTaxApi.Tools
 {
     public  static class ExcelMapperDevice  
     {
-        public static async Task<Tuple<List<TransactionDTO>,string>> Map(IFormFile file)
+        public static async Task<Tuple<List<TransactionCreationDTO>,string>> Map(IFormFile file)
         {
             try
             {
                 HttpResponseMessage ResponseMessage = null;
                 DataSet dsexcelRecords = new DataSet();
                 IExcelDataReader excelReader = null;
-                List<TransactionDTO> resultDTOList = null;
+                List<TransactionCreationDTO> resultDTOList = null;
                 string message = string.Empty;
+                var filename = file.FileName;
 
                 if (file != null)
                 {
@@ -26,14 +27,19 @@ namespace ICTTaxApi.Tools
                         await file.CopyToAsync(memoryStream);
                         memoryStream.Position = 0;
 
-                        var fileContent = reader.ReadToEnd();
-                        var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-                        var fileName = parsedContentDisposition.FileName.Value;
+                        //var fileContent = reader.ReadToEnd();
+                        //var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                        //var fileName = parsedContentDisposition.FileName.Value;
 
-                        if (memoryStream != null && memoryStream.Length > 0)
-                        {
-                            if (fileName.EndsWith(".xls") || fileName.EndsWith(".xlsx"))
+                        if (memoryStream != null && memoryStream.Length > 0) {
+                            //if (reader != null && reader..Length > 0)
+                            //{
+
+                            if (filename.EndsWith(".xls") || filename.EndsWith(".xlsx") || filename.EndsWith(".xltx"))
+                            {
+                                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
                                 excelReader = ExcelReaderFactory.CreateOpenXmlReader(memoryStream);
+                            }
                             else
                                 message = "The file format is not supported.";
 
@@ -42,11 +48,11 @@ namespace ICTTaxApi.Tools
 
                             if (dsexcelRecords != null && dsexcelRecords.Tables.Count > 0)
                             {
-                                resultDTOList = new List<TransactionDTO>();
+                                resultDTOList = new List<TransactionCreationDTO>();
                                 DataTable transactionRecords = dsexcelRecords.Tables[0];
-                                for (int i = 0; i < transactionRecords.Rows.Count; i++)
+                                for (int i = 1; i < transactionRecords.Rows.Count; i++)
                                 {
-                                    TransactionDTO newTransaction = new TransactionDTO();
+                                    TransactionCreationDTO newTransaction = new TransactionCreationDTO();
                                     newTransaction.TransactionDate = Convert.ToString(transactionRecords.Rows[i][0]);
                                     newTransaction.ClientName = Convert.ToString(transactionRecords.Rows[i][1]);
                                     newTransaction.Description = Convert.ToString(transactionRecords.Rows[i][2]);
@@ -58,7 +64,7 @@ namespace ICTTaxApi.Tools
                                     message = "Something Went Wrong!, The Excel file uploaded has failed.";
                             }
                             else
-                                message = "Selected file is empty.";
+                                message = "The excel file is empty.";
                         }
                         else
                             message = "Invalid File.";
@@ -66,7 +72,7 @@ namespace ICTTaxApi.Tools
                 }
                 else
                     message = "Invalid File.";
-                return new Tuple<List<TransactionDTO>, string>(resultDTOList, message);
+                return new Tuple<List<TransactionCreationDTO>, string>(resultDTOList, message);
             }
             catch (Exception)
             {
