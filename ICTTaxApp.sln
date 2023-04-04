@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICTTaxApi", "ICTTaxApi\ICTT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileUploadFunction", "FileUploadFunction\FileUploadFunction.csproj", "{088FDCA7-72BC-4DFA-A532-096ED3C8D03B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ICTTaxWeb", "ICTTaxWeb", "{E1EAC3F2-2817-4D46-9F0E-6D18AE67054D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

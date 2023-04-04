@@ -3,6 +3,8 @@ using ICTTaxApi.DTOs;
 using ICTTaxApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using ICTTaxApi.Tools;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ICTTaxApi.Controllers
 {
@@ -12,34 +14,51 @@ namespace ICTTaxApi.Controllers
     {
         private readonly IICTTaxService service;
         private readonly ILogger<ICTTransactionController> logger;
+        private readonly IConfiguration config;
 
         public ICTTransactionController(IICTTaxService service,
-            ILogger<ICTTransactionController> logger, IMapper mapper)
+            ILogger<ICTTransactionController> logger, IMapper mapper,
+            IConfiguration config)
         {
             this.service = service;
             this.logger = logger;
+            this.config = config;
         }
 
         [HttpGet]
         [HttpGet("transactions",Name ="GetTransactions")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(List<TransactionDTO>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<TransactionDTO>>> Get()
+        [ProducesResponseType(typeof(TransactionResponseDTO), StatusCodes.Status200OK)]
+        //[Authorize]
+        public async Task<ActionResult<TransactionResponseDTO>> Get(
+            [FromQuery] int pageNumber=1,
+            [FromQuery] int pageSize=50,
+            [FromQuery] string sortValue="")
         {
             try
             {
-                var transactionList = await service.GetTransactions();
+                TransactionResponseDTO response;
+                var transactionList = await service.GetTransactions(pageNumber, pageSize, sortValue);
 
                 if (transactionList == null)
                 {
                     return NotFound();
                 }
+                
+                response = new TransactionResponseDTO(
+                    pageNumber,
+                    pageSize,
+                    transactionList.Count(),
+                    transactionList.Count());
 
-                return transactionList;
+                response.Transactions = transactionList;
+
+                return response;
             }
             catch (Exception ex)
             {
+                this.logger.LogError("An error ocurred while retrieving transactions.{0}", ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -47,6 +66,7 @@ namespace ICTTaxApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType( StatusCodes.Status201Created)]
+        //[Authorize]
         public async Task<ActionResult> Post(IFormFile file)
         {
             try
@@ -60,15 +80,17 @@ namespace ICTTaxApi.Controllers
 
                     //if (await TryUpdateModelAsync<List<TransactionDTO>>(model))
                     //{
-                        this.logger.LogInformation("Start request add file {0} to system.");
+                    this.logger.LogInformation("Start request add file {0} to system.");
 
-                        service.AddTransactions(DTOlist, file.FileName);
-                    //}
-                    //else
-                      //  return BadRequest("An error ocurred while validating the request. Somes fields are in incorrect format.");
-                    //}
+                    var taxFileName = await service.AddTransactions(DTOlist, file.FileName);
+                    if (!string.IsNullOrEmpty(taxFileName))
+                    {
+                        await FileTaxUploader.Upload(config, file, taxFileName);
+                    }
+                    else
+                        return BadRequest("An error ocurred while validating the request. Somes fields are in incorrect format.");
 
-                    this.logger.LogInformation("File successfully updated.");
+                this.logger.LogInformation("File successfully updated.");
 
                     return CreatedAtRoute("GetTransactions",null);
                 }
@@ -87,11 +109,12 @@ namespace ICTTaxApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(List<TransactionDTO>),StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<TransactionDTO>>> Get([FromRoute]string clientname)
+        //[Authorize]
+        public async Task<ActionResult<List<TransactionDTO>>> Get([FromRoute]string clientname, [FromQuery] string sortValue)
         {
             try
             {
-                var transactionList = await service.GetClientTransactions(clientname);
+                var transactionList = await service.GetClientTransactions(clientname, sortValue);
 
                 if (transactionList == null)
                 {
@@ -111,6 +134,7 @@ namespace ICTTaxApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(TransactionSummaryDTO), StatusCodes.Status200OK)]
+        //[Authorize]
         public async Task<ActionResult<TransactionSummaryDTO>> GetSummary()
         {
             try

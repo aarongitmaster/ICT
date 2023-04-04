@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\ICTTaxApi",
-    "\\ICTTaxWeb"
+    "\\ICTTaxWeb",
+    "\\ICTTaxWeb\\src"
   ],
-  "SelectedNode": "\\ICTTaxApi.sln",
+  "SelectedNode": "\\ICTTaxWeb",
   "PreviewInSolutionExplorer": false
 }

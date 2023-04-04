@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Learning\\ICT\\ICTTaxApi\\ICTTaxApi\\ICTTaxApi.csproj": {}
+    "C:\\Learning\\ICT\\ICTTaxes\\ICTTaxApi\\ICTTaxApi.csproj": {}
   },
   "projects": {
-    "C:\\Learning\\ICT\\ICTTaxApi\\ICTTaxApi\\ICTTaxApi.csproj": {
+    "C:\\Learning\\ICT\\ICTTaxes\\ICTTaxApi\\ICTTaxApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Learning\\ICT\\ICTTaxApi\\ICTTaxApi\\ICTTaxApi.csproj",
+        "projectUniqueName": "C:\\Learning\\ICT\\ICTTaxes\\ICTTaxApi\\ICTTaxApi.csproj",
         "projectName": "ICTTaxApi",
-        "projectPath": "C:\\Learning\\ICT\\ICTTaxApi\\ICTTaxApi\\ICTTaxApi.csproj",
+        "projectPath": "C:\\Learning\\ICT\\ICTTaxes\\ICTTaxApi\\ICTTaxApi.csproj",
         "packagesPath": "C:\\Users\\ASamh\\.nuget\\packages\\",
-        "outputPath": "C:\\Learning\\ICT\\ICTTaxApi\\ICTTaxApi\\obj\\",
+        "outputPath": "C:\\Learning\\ICT\\ICTTaxes\\ICTTaxApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
