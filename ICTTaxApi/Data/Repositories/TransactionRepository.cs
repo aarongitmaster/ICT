@@ -6,6 +6,7 @@ namespace ICTTaxApi.Data.Repositories
     public class TransactionRepository : ITransactionRepository
     {
         private readonly ICTTaxDbContext context;
+        
 
         public TransactionRepository(ICTTaxDbContext context)
         {
@@ -34,8 +35,10 @@ namespace ICTTaxApi.Data.Repositories
                     break;
             }
 
-            resultList = resultList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-            
+            resultList = resultList.Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize).ToList();
+
+
             return resultList;
         }
 
@@ -58,9 +61,10 @@ namespace ICTTaxApi.Data.Repositories
             return  resultList;
         }
 
-        public async Task Add(List<Transaction> transactions, string filename)
+        public async Task<string> Add(List<Transaction> transactions, string filename)
         {
-            
+            string currentFileName = string.Empty;
+
                 var amounts = transactions.Select(x => x.Amount);
                 var newTaxDocument = new TaxDocument()
                 {
@@ -82,7 +86,11 @@ namespace ICTTaxApi.Data.Repositories
                     await context.Transactions.AddRangeAsync(transactions);
 
                     await Save();
+
+                    currentFileName = newTaxDocument.FileName;
                 }
+
+            return currentFileName;
         }
 
         public async Task<int> GetTransactionCount()

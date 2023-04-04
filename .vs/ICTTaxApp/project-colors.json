@@ -5,7 +5,12 @@
       "ProjectGuid": "93c35867-afc9-4956-817a-29654ae819c4",
       "DisplayName": "ICTTaxApi",
       "ColorIndex": 0
+    },
+    "088fdca7-72bc-4dfa-a532-096ed3c8d03b": {
+      "ProjectGuid": "088fdca7-72bc-4dfa-a532-096ed3c8d03b",
+      "DisplayName": "FileUploadFunction",
+      "ColorIndex": 1
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 2
 }

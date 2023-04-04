@@ -10,16 +10,20 @@ namespace ICTTaxApi.Services
         private readonly ITransactionRepository transactionRepository;
         private readonly IClientRepository clientRepository;
         private readonly IMapper mapper;
+        public string storeContainerURL { get; set; }
 
-        public ICTTaxService(ITransactionRepository transactionRepository,
-            IClientRepository clientRepository, IMapper mapper)
+        public ICTTaxService(IConfiguration config,
+            ITransactionRepository transactionRepository,
+            IClientRepository clientRepository, 
+            IMapper mapper)
         {
             this.transactionRepository = transactionRepository;
             this.clientRepository = clientRepository;
             this.mapper = mapper;
+            storeContainerURL = config.GetValue<string>("StorageContainerURL");
         }
 
-        public async Task<bool> AddTransactions(List<TransactionCreationDTO> transactionsDTO,string filename)
+        public async Task<string> AddTransactions(List<TransactionCreationDTO> transactionsDTO,string filename)
         {
             var clientDTOList = transactionsDTO.Select(transation=> transation.ClientName).ToList();
             await clientRepository.AddRange(clientDTOList);
@@ -36,9 +40,8 @@ namespace ICTTaxApi.Services
 
             var transactionList = mapper.Map<List<Transaction>>(transactionsDTO);
 
-            await transactionRepository.Add(transactionList, filename);
+           return  await transactionRepository.Add(transactionList, filename);
 
-            return true;
         }
 
         public async  Task<List<TransactionDTO>> GetClientTransactions(string clientname, string sortValue)
@@ -50,7 +53,15 @@ namespace ICTTaxApi.Services
 
             var transactions = await transactionRepository.GetById(client.Id,sortValue);
 
-            return mapper.Map<List<TransactionDTO>>(transactions);
+            var transactionList= mapper.Map<List<TransactionDTO>>(transactions);
+
+            foreach (var transaction in transactionList)
+            {
+                var fileName = transaction.FileName;
+                transaction.FileUrl= $"{storeContainerURL}{fileName}";
+            }
+
+            return transactionList;
         }
 
         public async  Task<TransactionSummaryDTO> GetSummary()
@@ -68,8 +79,14 @@ namespace ICTTaxApi.Services
         {
             var transactions =  await transactionRepository.Get(pageNumber, pageSize, sortValue);
 
-            return mapper.Map<List<TransactionDTO>>(transactions);
+            var transactionList = mapper.Map<List<TransactionDTO>>(transactions);
+            foreach (var transaction in transactionList)
+            {
+                var fileName = transaction.FileName;
+                transaction.FileUrl = $"{storeContainerURL}{fileName}";
+            }
 
+            return transactionList;
         }
     }
 }

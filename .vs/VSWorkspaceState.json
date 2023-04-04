@@ -4,13 +4,14 @@
     "\\ICTTaxApi",
     "\\ICTTaxApi\\Data",
     "\\ICTTaxApi\\Data\\Repositories",
+    "\\ICTTaxApi\\Services",
+    "\\ICTTaxApi\\Tools",
     "\\ICTTaxWeb",
     "\\ICTTaxWeb\\src",
     "\\ICTTaxWeb\\src\\app",
     "\\ICTTaxWeb\\src\\app\\tax-documents",
-    "\\ICTTaxWeb\\src\\app\\tax-documents\\tax-client",
     "\\ICTTaxWeb\\src\\app\\tax-documents\\tax-summary"
   ],
-  "SelectedNode": "\\ICTTaxWeb\\src\\app\\tax-documents\\tax-documents.component.ts",
+  "SelectedNode": "\\ICTTaxApi\\Data\\Repositories\\TransactionRepository.cs",
   "PreviewInSolutionExplorer": false
 }

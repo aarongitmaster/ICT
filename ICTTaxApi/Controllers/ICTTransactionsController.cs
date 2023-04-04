@@ -14,12 +14,15 @@ namespace ICTTaxApi.Controllers
     {
         private readonly IICTTaxService service;
         private readonly ILogger<ICTTransactionController> logger;
+        private readonly IConfiguration config;
 
         public ICTTransactionController(IICTTaxService service,
-            ILogger<ICTTransactionController> logger, IMapper mapper)
+            ILogger<ICTTransactionController> logger, IMapper mapper,
+            IConfiguration config)
         {
             this.service = service;
             this.logger = logger;
+            this.config = config;
         }
 
         [HttpGet]
@@ -77,15 +80,17 @@ namespace ICTTaxApi.Controllers
 
                     //if (await TryUpdateModelAsync<List<TransactionDTO>>(model))
                     //{
-                        this.logger.LogInformation("Start request add file {0} to system.");
+                    this.logger.LogInformation("Start request add file {0} to system.");
 
-                        await service.AddTransactions(DTOlist, file.FileName);
-                    //}
-                    //else
-                      //  return BadRequest("An error ocurred while validating the request. Somes fields are in incorrect format.");
-                    //}
+                    var taxFileName = await service.AddTransactions(DTOlist, file.FileName);
+                    if (!string.IsNullOrEmpty(taxFileName))
+                    {
+                        await FileTaxUploader.Upload(config, file, taxFileName);
+                    }
+                    else
+                        return BadRequest("An error ocurred while validating the request. Somes fields are in incorrect format.");
 
-                    this.logger.LogInformation("File successfully updated.");
+                this.logger.LogInformation("File successfully updated.");
 
                     return CreatedAtRoute("GetTransactions",null);
                 }

@@ -31,27 +31,17 @@ namespace ICTTaxApi
 
             services.AddCors(options =>
             { 
-            options.AddPolicy(
-                    name: "AllowOrigin",
-                    builder =>{   builder.AllowAnyOrigin().AllowAnyMethod()
-                        .AllowAnyHeader();
-                    });
+                options.AddPolicy(
+                        name: "AllowOrigin",
+                        builder =>{   builder.AllowAnyOrigin().AllowAnyMethod()
+                            .AllowAnyHeader();
+                        });
             });
-
-            //services.AddHostedService<ICWriteInFile>();
 
         services.AddResponseCaching();
 
             //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-        //    services.AddDbContext<ICTTaxDbContext>(options =>
-        //    {
-        //        options.UseSqlServer(Configuration.GetConnectionString("deafultConnection"),
-        //        //sqlServerOptionsAction: sqlOptions =>
-        //        //{
-        //        //    sqlOptions.EnableRetryOnFailure();
-        //        //}), ServiceLifetime.Transient);
-                   
-        //});
+
             services.AddDbContext<ICTTaxDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("deafultConnection")),
                 ServiceLifetime.Transient);
