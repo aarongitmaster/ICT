@@ -10,7 +10,12 @@
       "ProjectGuid": "088fdca7-72bc-4dfa-a532-096ed3c8d03b",
       "DisplayName": "FileUploadFunction",
       "ColorIndex": 1
+    },
+    "e1eac3f2-2817-4d46-9f0e-6d18ae67054d": {
+      "ProjectGuid": "e1eac3f2-2817-4d46-9f0e-6d18ae67054d",
+      "DisplayName": "ICTTaxWeb",
+      "ColorIndex": 2
     }
   },
-  "NextColorIndex": 2
+  "NextColorIndex": 3
 }

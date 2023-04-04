@@ -1,17 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\ICTTaxApi",
-    "\\ICTTaxApi\\Data",
-    "\\ICTTaxApi\\Data\\Repositories",
-    "\\ICTTaxApi\\Services",
-    "\\ICTTaxApi\\Tools",
     "\\ICTTaxWeb",
-    "\\ICTTaxWeb\\src",
-    "\\ICTTaxWeb\\src\\app",
-    "\\ICTTaxWeb\\src\\app\\tax-documents",
-    "\\ICTTaxWeb\\src\\app\\tax-documents\\tax-summary"
+    "\\ICTTaxWeb\\src"
   ],
-  "SelectedNode": "\\ICTTaxApi\\Data\\Repositories\\TransactionRepository.cs",
+  "SelectedNode": "\\ICTTaxWeb",
   "PreviewInSolutionExplorer": false
 }
