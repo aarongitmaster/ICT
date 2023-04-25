@@ -16,6 +16,8 @@ variables:
 
 steps:
 - script:echo Hello,world, changed!
+  displayName: 'Run a one-line script'
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
