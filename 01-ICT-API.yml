@@ -15,7 +15,7 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script:echo Hello,world, changed!
+- script:echo Hello, world, changed!
   displayName: 'Run a one-line script'
 
 - task: NuGetToolInstaller@1
