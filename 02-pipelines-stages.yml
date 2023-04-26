@@ -28,7 +28,7 @@ stages:
     - bash: echo $(System.DefaultWorkingDirectory)
     - bash: echo $(build.ArtifactStagingDirectory)
     - bash: echo 
-    - bash: windows -version
+    # - bash: windows -version
     - bash: node --version
     - bash: python --version
     - bash: mvn -version
