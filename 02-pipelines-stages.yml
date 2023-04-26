@@ -27,6 +27,10 @@ stages:
     - bash: echo $(Build.SourcesDirectory)
     - bash: echo $(System.DefaultWorkingDirectory)
     - bash: echo $(Build.ArtifactStagingDirectory)
+    - bash: windows -version
+    - bash: node --version
+    - bash: python --version
+    - bash: mvn -version
   - job: SecondJob
     steps: 
     - bash: echo Build SecondJob
